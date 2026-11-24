@@ -12,6 +12,15 @@ import { mkdirSync, writeFileSync } from "node:fs";
 const PITCH =
   "A washing machine that kidnaps one sock per load and returns it only after a ransom of fabric softener.";
 
+// Guard the gate before writing: the entry must be 1–220 UTF-8 characters
+// and not only whitespace, or the sealed scorer refuses it.
+if (PITCH.length < 1 || PITCH.length > 220) {
+  throw new Error(`Pitch must be 1–220 characters, got ${PITCH.length}`);
+}
+if (PITCH.trim().length === 0) {
+  throw new Error("Pitch must not be only whitespace");
+}
+
 mkdirSync("/output", { recursive: true });
 writeFileSync("/output/entry.txt", PITCH, "utf8");
 console.log(`Wrote ${PITCH.length} chars to /output/entry.txt`);
